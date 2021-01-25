@@ -1,0 +1,175 @@
+---
+title: "Algunas aplicaciones con funciones utlizando R Package"
+author: "Jhonathan Aponte Saravia"
+date: "25/1/2021"
+output: html_document
+---
+```{r}
+#OPeraciones con funciones en R
+
+###############
+suma <- function(a, b)
+{
+  c <- a + b
+  return(c)
+}
+suma(100, 500)
+
+#############
+
+pot <- function(x=10, y=4)
+  {
+  z <- x ^ y 
+  return(z)
+  }
+pot()
+###########
+#Valor abosulto
+
+absoluto <- function(x=-10)
+  {
+    k<- if(x<0){ -x }
+  return(k)
+}
+absoluto()
+######
+#Funciones condicionales 
+
+fcondi <- function(x=4.5) 
+  {
+  w <- if (x < 5) 
+  {0} else {10}
+  return(w)
+} 
+
+fcondi()
+
+fcondi <- function(x=5.5) 
+{
+  w <- if (x < 5) 
+  {0} else {10}
+  return(w)
+} 
+fcondi()
+####
+
+fcond <- function(x=2.95) 
+{
+  w <- if (x < 3) # si la nota es mayor que 3, entonces aprueba.
+  {"Desaprobado"} else {"Aprobado"}
+  return(w)
+}
+
+fcond()
+####
+#Por ejemplo:
+#La Tasa de Metabolismo Basal (TMB), es la cantidad mínima de energía que necesita tu cuerpo para funcionar. Nunca debemos ingerir menos cantidad de calorías de las que marca la tasa metabólica. La TMB se calcula siguiendo las siguientes ecuaciones
+#TMB Mujer = 655 + (9,6 * P) + (1,8 * A) – (4,7 * E)
+#TMB Hombre = 66 + (13,7 * P) + (5 * A) – (6,8 * E)
+#Entonces cuanto kalorias debe conusmir una pareja  como mínimo, si Juan  pesa 78 kilos, mide 167cm,  y tiene 40 años, 
+# ("hombre",167,78,40) mientras que Maria pesa 70 kilos, mide 168cm y tiene 38 años ("mujer",168,70,38) 
+
+TMB <-function(Sexo,Altura,Peso,Edad){
+    tmb<- if(Sexo=="mujer"){ 655 + (9.6 * Peso) + (1.8 * Altura) - (4.7 * Edad)}
+  else
+  { 66 + (13.7 * Peso) + (5 * Altura) - (6.8 * Edad) }
+    return(tmb)
+  }
+TMB("hombre",167,78,40)
+TMB("mujer",168,70,38)
+
+#####
+#Hallando distancias entre dos puntos en un plano cartensiano, utlizando la ecuacion de pitagoras.
+# valores de coordenadas en en el punto P1 (X1, y2) y e punto (X2,y2)
+
+Coor_dist <- function(x1=0, y1=0, x2=3, y2=4)
+{
+  raiz <- sqrt((x2 - x1)^2 + (y2 - y1)^2)
+  return(raiz)
+}
+Coor_dist()
+
+#Hallando distancia entre dos puntos utilizando grados decimales en kilometros
+#Punto1 (Lat1=4.6972;long1 = -74.1246) y Punto(Lat2=7.11777;Long2=-73.1814)
+
+distancia <- function(lat1, long1, lat2, long2)
+{
+  Term1 <- sin(lat1*pi/180)*sin(lat2*pi/180)
+  Term2 <- cos(lat1*pi/180)*cos(lat2*pi/180)*cos((long1 - long2)*pi/180)
+  Ang <- acos(Term1 + Term2)
+  Dist <- 6378.137*Ang
+  return(Dist)
+}
+distancia(4.6972, -74.1246, 7.11777, -73.1814)
+
+
+#M{Método Haversine en  metros.
+#Punto1 (Lat1=4.6972;long1 = -74.1246) y Punto(Lat2=7.11777;Long2=-73.1814)
+Havrsine <-function(Lat1, Long1, Lat2, Long2)
+{
+  rad <- pi/180
+  a1 <- Lat1*rad
+  a2 <- Long1*rad
+  b1 <- Lat2*rad
+  b2 <- Long2 *rad
+  dlon <- b2 - a2
+  dlat <- b1 - a1
+  a <- (sin(dlat/2))^2 + cos(a1)*cos(b1)*(sin(dlon/2))^2
+  c <- 2*atan2(sqrt(a), sqrt(1 - a))
+  R <- 6378137
+  d <- R*c
+  
+  return(d)
+}
+
+Havrsine(4.6972, -74.1246, 7.11777, -73.1814)
+
+
+#######
+
+
+#Se tiene que asignar un nombre a la función
+grafico_normal<- function(m = 0, de = 1, limites = NULL) {
+  #Utilizando el código del ejemplo Quick-R  
+  #Se crea la distribución normal
+  x<- seq(-5,4,length=100)*de + m
+  hx <- dnorm(x,m,de)
+  
+  #Se grafica la curva
+  plot(x, hx, type="n", xlab="Eje de las absisas", ylab="", 
+       main="Distribución normal", axes=TRUE)
+  lines(x, hx)
+  axis(1, at = seq(min(x), max(x)), pos = 0)
+  #Se indica cual es el área a sombrear
+  if (!is.null(limites)) {
+    #Asignamos los límites individualmente a una variable
+    linf<- limites[1]
+    lsup<- limites[2.2]
+    i <- x >= linf & x <= lsup
+    
+    #Cambié el rojo por uno más oscuro
+    polygon(c(linf,x[i],lsup), c(0,hx[i],0), col="light blue")
+    area <- pnorm(lsup, m, de) - pnorm(linf, m, de)
+    result <- paste("P(",linf,"< x <",lsup,") =",
+                    signif(area, digits=3))
+    mtext(result,3)
+  }
+}
+# se muestra la grafica de la funcion.
+
+grafico_normal(100,15, c(75,115))
+
+grafico_normal(limites = c(-Inf,1.0))
+
+grafico_normal(100,15,c(60,140))
+
+# Creación de histograma aplicando funciones
+
+random <- function(){
+  datos <- rnorm(n = 154, mean = 10, sd= 4.1) 
+  histograma <- hist(datos, col="light blue", axes=TRUE, main="Distribución de datos")
+  return(histograma)
+} 
+random()
+```
+
