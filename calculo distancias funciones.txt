@@ -1,0 +1,44 @@
+suma <- function(X1,Y1,X2,Y2)
+{
+  c <- ((X1-X2)^2 + (Y1-Y2)^2)^0.5
+  return(c)
+}
+suma(0,0, 3,4)
+###########################################
+Coor_dist <- function(x1=0, y1=0, x2=3, y2=4)
+{
+  raiz <- sqrt((x2 - x1)^2 + (y2 - y1)^2)
+  return(raiz)
+}
+Coor_dist()
+
+#####
+distancia <- function(lat1, long1, lat2, long2)
+{
+  Term1 <- sin(lat1*pi/180)*sin(lat2*pi/180)
+  Term2 <- cos(lat1*pi/180)*cos(lat2*pi/180)*cos((long1 - long2)*pi/180)
+  Ang <- acos(Term1 + Term2)
+  Dist <- 6378137*Ang
+  return(Dist)
+}
+distancia(4.6972, -74.1246, 7.11777, -73.1814)
+#M{Método Haversine en  metros.
+#Punto1 (Lat1=4.6972;long1 = -74.1246) y Punto(Lat2=7.11777;Long2=-73.1814)
+Havrsine <-function(Lat1, Long1, Lat2, Long2)
+{
+  rad <- pi/180
+  a1 <- Lat1*rad
+  a2 <- Long1*rad
+  b1 <- Lat2*rad
+  b2 <- Long2 *rad
+  dlon <- b2 - a2
+  dlat <- b1 - a1
+  a <- (sin(dlat/2))^2 + cos(a1)*cos(b1)*(sin(dlon/2))^2
+  c <- 2*atan2(sqrt(a), sqrt(1 - a))
+  R <- 6378137
+  d <- R*c
+  
+  return(d)
+}
+Havrsine(4.6972, -74.1246, 7.11777, -73.1814)
+
